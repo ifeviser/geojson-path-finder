@@ -10,10 +10,10 @@ function findNextEnd(prev, v, vertices, ends, vertexCoords, edgeData, trackIncom
         reverseWeight = vertices[v][prev],
         coordinates = [],
         path = [],
-        reducedEdge = options.edgeDataSeed;
+        reducedEdge = [];//options.edgeDataSeed;
         
     if (options.edgeDataReduceFn) {
-        reducedEdge = options.edgeDataReduceFn(reducedEdge, edgeData[v][prev]);
+        reducedEdge.push(options.edgeDataReduceFn(reducedEdge, edgeData[v][prev]));
     }
 
     while (!ends[v]) {
@@ -35,7 +35,7 @@ function findNextEnd(prev, v, vertices, ends, vertexCoords, edgeData, trackIncom
         }
 
         if (options.edgeDataReduceFn) {
-            reducedEdge = options.edgeDataReduceFn(reducedEdge, edgeData[v][next]);
+            reducedEdge.push(options.edgeDataReduceFn(reducedEdge, edgeData[v][next]));
         }
 
         coordinates.push(vertexCoords[v]);
@@ -86,9 +86,7 @@ function compactGraph(vertices, vertexCoords, edgeData, options) {
         var numberEdges = edges.length;
         var remove;
 
-        if (options.compact !== undefined && !options.compact) {
-            remove = false;
-        } else if (numberEdges === 1) {
+        if (numberEdges === 1) {
             var other = vertices[edges[0]];
             remove = !other[k];
         } else if (numberEdges === 2) {
@@ -98,7 +96,7 @@ function compactGraph(vertices, vertexCoords, edgeData, options) {
         } else {
             remove = false;
         }
-
+        
         if (!remove) {
             es[k] = vertex;
         }
